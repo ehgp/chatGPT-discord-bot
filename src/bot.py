@@ -2,10 +2,9 @@ import discord
 from discord import app_commands
 from src import responses
 from src import log
+import os
 
 logger = log.setup_logger(__name__)
-
-config = responses.get_config()
 
 isPrivate = False
 
@@ -69,17 +68,17 @@ async def send_start_prompt(client):
     import os
     import os.path
 
-    config_dir = os.path.abspath(__file__ + "/../../")
+    root_dir = os.path.abspath(__file__ + "/../../")
     prompt_name = 'starting-prompt.txt'
-    prompt_path = os.path.join(config_dir, prompt_name)
+    prompt_path = os.path.join(root_dir, prompt_name)
     try:
         if os.path.isfile(prompt_path) and os.path.getsize(prompt_path) > 0:
             with open(prompt_path, "r") as f:
                 prompt = f.read()
-                if (config['discord_channel_id']):
+                if (os.environ["DISCORD_CHANNEL_ID"]):
                     logger.info(f"Send starting prompt with size {len(prompt)}")
                     responseMessage = await responses.handle_response(prompt)
-                    channel = client.get_channel(int(config['discord_channel_id']))
+                    channel = client.get_channel(int(os.environ["DISCORD_CHANNEL_ID"]))
                     await channel.send(responseMessage)
                     logger.info(f"Starting prompt response:{responseMessage}")
                 else:
@@ -142,7 +141,7 @@ def run_discord_bot():
         logger.warning(
             "\x1b[31mChatGPT bot has been successfully reset\x1b[0m")
         await send_start_prompt(client)
-        
+
     @client.tree.command(name="help", description="Show help for the bot")
     async def help(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
@@ -150,5 +149,5 @@ def run_discord_bot():
         logger.info(
             "\x1b[31mSomeone need help!\x1b[0m")
 
-    TOKEN = config['discord_bot_token']
+    TOKEN = os.environ["DISCORD_BOT_TOKEN"]
     client.run(TOKEN)
