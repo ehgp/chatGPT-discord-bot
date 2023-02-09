@@ -10,9 +10,16 @@
 
 ## Features
 
+### Discord Bot
+
 * `/chat [message]` Chat with ChatGPT!
 * `/private` ChatGPT switch to private mode
 * `/public`  ChatGPT switch to public  mode
+* `/reset`   ChatGPT conversation history will be erased
+
+### Telegram Bot
+
+* `/start` Start up ChatGPT!
 * `/reset`   ChatGPT conversation history will be erased
 
 ## Chat
