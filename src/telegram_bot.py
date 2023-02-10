@@ -31,7 +31,7 @@ from src import log
 logger = log.setup_logger(__name__)
 
 TELEGRAM_USER_ID = int(os.environ["TELEGRAM_USER_ID"])
-TELEGRAM_API_KEY = os.environ["DISCORD_BOT_TOKEN"]
+TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
 
 
 # create a decorator called auth that receives USER_ID as an argument with wraps
@@ -70,7 +70,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def reset(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Reset ChatGPT."""
     await responses.chatbot.reset()
-    await update.message.reply_text("**Info: I have forgotten everything.**")
+    await update.message.reply_text("Info: I have forgotten everything.")
     logger.info("\x1b[31mChatGPT bot has been successfully reset\x1b[0m")
     await send_start_prompt(update, context)
 
@@ -168,7 +168,7 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text(response)
         # parse_mode=telegram.constants.ParseMode.MARKDOWN_V2
     except Exception as e:
-        await update.message.reply_text("**Error: Something went wrong, please try again later!**")
+        await update.message.reply_text(f"Error: Something went wrong, please try again later! {e}")
         logger.exception(f"Error while sending message: {e}")
 
 

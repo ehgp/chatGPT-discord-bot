@@ -61,7 +61,7 @@ async def send_message(message, user_message):
         else:
             await message.followup.send(response)
     except Exception as e:
-        await message.followup.send("> **Error: Something went wrong, please try again later!**")
+        await message.followup.send(f"> **Error: Something went wrong, please try again later!** {e}")
         logger.exception(f"Error while sending message: {e}")
 
 

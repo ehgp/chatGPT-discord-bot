@@ -2,7 +2,7 @@
 from src import discord_bot
 from src import telegram_bot
 import sys
-
+from chat_logs import chat
 
 def check_verion() -> None:
     """Check Version."""
@@ -31,5 +31,6 @@ def check_verion() -> None:
 
 if __name__ == '__main__':
     # check_verion()
-    discord_bot.run_discord_bot()
+    # discord_bot.run_discord_bot()
+    chat.run_telegram_chat()
     # telegram_bot.run_telegram_bot()
