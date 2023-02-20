@@ -165,4 +165,4 @@ chat_logs
 **/*.txt
 **/*.json
 **/*.jsonl
-./chat_logs/whatsapp_chat_cleaning.py
+./chat_logs

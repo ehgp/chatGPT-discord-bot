@@ -104,7 +104,7 @@ OR
 ## Optional: Setup starting prompt
 
 * A starting prompt would be invoked when the bot is first started or reset
-* You can set it up by modifying the content in `starting-prompt.txt`
+* You can set it up by modifying the content in `.env.example.CUSTOM_BASE_PROMPT`
 * All the text in the file will be fired as a prompt to the bot
 * Get the first message from ChatGPT in your discord channel!
 

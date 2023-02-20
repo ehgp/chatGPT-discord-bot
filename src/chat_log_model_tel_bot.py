@@ -1,4 +1,4 @@
-"""Telegram Bot for ChatGPT and Stable Diffusion."""
+"""Telegram Bot for ChatGPT API completion model."""
 import json
 import time
 import os
@@ -7,7 +7,7 @@ import telegram
 # from src.sdAPI import drawWithStability
 from functools import wraps
 from telegram import __version__ as TG_VER
-from src import responses
+import openai
 
 try:
     from telegram import __version_info__
@@ -62,66 +62,64 @@ def auth(user_id):
     return decorator
 
 
-@auth(TELEGRAM_USER_ID)
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /start is issued."""
-    user = update.effective_user
-    await update.message.reply_html(
-        rf"Hi {user.mention_html()}!",
-        # reply_markup=ForceReply(selective=True),
-    )
-    await help_command(update, context)
+# @auth(TELEGRAM_USER_ID)
+# async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+#     """Send a message when the command /start is issued."""
+#     user = update.effective_user
+#     await update.message.reply_html(
+#         rf"Hi {user.mention_html()}!",
+#         # reply_markup=ForceReply(selective=True),
+#     )
+#     await help_command(update, context)
 
 
-@auth(TELEGRAM_USER_ID)
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /help is issued."""
-    await update.message.reply_text(
-        "**COMMANDS** \n`/start` Start Chatting with ChatGPT! \n`/reset` ChatGPT will reset conversation history \nFor complete documentation, please visit https://github.com/ehgp/chatGPT-discord-bot"
-    )
+# @auth(TELEGRAM_USER_ID)
+# async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+#     """Send a message when the command /help is issued."""
+#     await update.message.reply_text("**COMMANDS** \n`/start` Start Chatting with ChatGPT! \n`/reset` ChatGPT will reset conversation history \nFor complete documentation, please visit https://github.com/ehgp/chatGPT-discord-bot")
 
 
-@auth(TELEGRAM_USER_ID)
-async def reset(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Reset ChatGPT."""
-    await responses.chatbot.reset()
-    await update.message.reply_text("Info: I have forgotten everything.")
-    logger.info("\x1b[31mChatGPT bot has been successfully reset\x1b[0m")
-    await send_start_prompt(update, context)
+# @auth(TELEGRAM_USER_ID)
+# async def reset(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+#     """Reset ChatGPT."""
+#     # await responses.chatbot.reset()
+#     await update.message.reply_text("**Info: I have forgotten everything.**")
+#     logger.info("\x1b[31mChatGPT bot has been successfully reset\x1b[0m")
+#     await send_start_prompt(update, context)
 
 
-@auth(TELEGRAM_USER_ID)
-async def send_start_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Send starting prompt."""
-    import os
-    import os.path
+# @auth(TELEGRAM_USER_ID)
+# async def send_start_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE):
+#     """Send starting prompt."""
+#     import os
+#     import os.path
 
-    try:
-        if os.environ["CUSTOM_BASE_PROMPT"]:
-            if os.environ["DISCORD_CHANNEL_ID"]:
-                logger.info(
-                    f"Send starting prompt with size {len(os.environ['CUSTOM_BASE_PROMPT'])}"
-                )
-                responseMessage = await responses.handle_response(
-                    os.environ["CUSTOM_BASE_PROMPT"]
-                )
-                await update.message.reply_text(responseMessage)
-                logger.info(f"Starting prompt response:{responseMessage}")
-            else:
-                logger.info("No Channel selected. Skip sending starting prompt.")
-        else:
-            logger.info(
-                "No CUSTOM_BASE_PROMPT ENV Value. Skip sending starting prompt."
-            )
-    except Exception as e:
-        logger.exception(f"Error while sending starting prompt: {e}")
+#     try:
+#         if os.environ["CUSTOM_BASE_PROMPT"]:
+#             if os.environ["DISCORD_CHANNEL_ID"]:
+#                 logger.info(
+#                     f"Send starting prompt with size {len(os.environ['CUSTOM_BASE_PROMPT'])}"
+#                 )
+#                 responseMessage = await responses.handle_response(
+#                     os.environ["CUSTOM_BASE_PROMPT"]
+#                 )
+#                 await update.message.reply_text(responseMessage)
+#                 logger.info(f"Starting prompt response:{responseMessage}")
+#             else:
+#                 logger.info("No Channel selected. Skip sending starting prompt.")
+#         else:
+#             logger.info(
+#                 "No CUSTOM_BASE_PROMPT ENV Value. Skip sending starting prompt."
+#             )
+#     except Exception as e:
+#         logger.exception(f"Error while sending starting prompt: {e}")
 
 
-@auth(TELEGRAM_USER_ID)
-async def reload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /help is issued."""
-    logger.info(f"Got a reload command from user {update.effective_user.id}")
-    await update.message.reply_text("Let's check if it's workin!")
+# @auth(TELEGRAM_USER_ID)
+# async def reload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+#     """Send a message when the command /help is issued."""
+#     logger.info(f"Got a reload command from user {update.effective_user.id}")
+#     await update.message.reply_text("Let's check if it's workin!")
 
 
 # async def draw(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -177,11 +175,23 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Echo the user message."""
     try:
         # Send the message to OpenAI
-        response = await responses.handle_response(update.message.text)
+        response = openai.Completion.create(
+            model=os.environ["FINE_TUNED_MODEL"],
+            prompt=update.message.text,
+            max_tokens=200,
+            temperature=0.4,
+            top_p=1,
+            n=1,
+            stream=False,
+            logprobs=None,
+            stop="\n",
+            presence_penalty=1.0,
+            frequency_penalty=1.0,
+        )
         # if "\[prompt:" in response:
         #     await respond_with_image(update, response)
         # else:
-        await update.message.reply_text(response)
+        await update.message.reply_text(response["choices"][0]["text"])
         # parse_mode=telegram.constants.ParseMode.MARKDOWN_V2
     except Exception as e:
         await update.message.reply_text(
@@ -239,16 +249,16 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 #         await update.message.reply_text(response, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
 
 
-def run_telegram_bot():
+def run_telegram_chat():
     """Start Telegram bot."""
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(os.environ["TELEGRAM_API_KEY"]).build()
 
     # on different commands - answer in Telegram
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("reload", reload))
-    application.add_handler(CommandHandler("reset", reset))
-    application.add_handler(CommandHandler("help", help_command))
+    # application.add_handler(CommandHandler("start", start))
+    # application.add_handler(CommandHandler("reload", reload))
+    # application.add_handler(CommandHandler("reset", reset))
+    # application.add_handler(CommandHandler("help", help_command))
     # application.add_handler(CommandHandler("draw", draw))
     # application.add_handler(CommandHandler("browse", browse))
 
