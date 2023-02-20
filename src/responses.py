@@ -1,7 +1,9 @@
 """Responses."""
-from revChatGPT.Official import Chatbot
-from asgiref.sync import sync_to_async
 import os
+
+from asgiref.sync import sync_to_async
+from revChatGPT.Official import Chatbot
+
 from src import log
 
 chatbot = Chatbot(api_key=os.environ["OPENAI_TOKEN"])

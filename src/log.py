@@ -1,6 +1,8 @@
-import os
+"""Logging setup for the bot."""
+
 import logging
 import logging.handlers
+import os
 
 
 class CustomFormatter(logging.Formatter):

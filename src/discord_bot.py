@@ -1,9 +1,10 @@
 """Discord Bot for ChatGPT."""
+import os
+
 import discord
 from discord import option
-from src import responses
-from src import log
-import os
+
+from src import log, responses
 
 logger = log.setup_logger(__name__)
 

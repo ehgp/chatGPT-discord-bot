@@ -1,16 +1,16 @@
 """Financial Modeling Prep API wrapper."""
 
-import pandas as pd
-from datetime import datetime, date, timedelta
-from pytz import timezone
-import os
 import json
-import certifi
+import os
+from datetime import date, datetime, timedelta
 from urllib.request import urlopen
-from iso3166 import ISO3166
-from iso3166 import DISCORD_FLAGS
-import log
 
+import certifi
+import pandas as pd
+from pytz import timezone
+
+import log
+from iso3166 import DISCORD_FLAGS, ISO3166
 
 logger = log.setup_logger(__name__)
 

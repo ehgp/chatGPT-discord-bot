@@ -1,9 +1,7 @@
 """Main."""
-from src import discord_bot
-from src import telegram_bot
-from src import chat_log_model_tel_bot
-from src import log
 import sys
+
+from src import chat_log_model_tel_bot, discord_bot, log, telegram_bot
 
 logger = log.setup_logger(__name__)
 

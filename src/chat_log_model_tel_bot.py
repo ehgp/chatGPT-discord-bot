@@ -1,13 +1,13 @@
 """Telegram Bot for ChatGPT API completion model."""
 import json
-import time
 import os
-import telegram
-
+import time
 # from src.sdAPI import drawWithStability
 from functools import wraps
-from telegram import __version__ as TG_VER
+
 import openai
+import telegram
+from telegram import __version__ as TG_VER
 
 try:
     from telegram import __version_info__
@@ -20,19 +20,15 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
         f"{TG_VER} version of this example, "
         f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
     )
-from telegram import ForceReply, Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import (ForceReply, InlineKeyboardButton, InlineKeyboardMarkup,
+                      Update)
+from telegram.ext import (Application, CommandHandler, ContextTypes,
+                          MessageHandler, filters)
 
-from telegram.ext import (
-    Application,
-    CommandHandler,
-    ContextTypes,
-    MessageHandler,
-    filters,
-)
+from src import log
 
 # from telegram.helpers import escape, escape_markdown
 
-from src import log
 
 # init loggger
 logger = log.setup_logger(__name__)

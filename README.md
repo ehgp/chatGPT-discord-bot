@@ -44,7 +44,7 @@
 
 ### Step 1: Create a Discord bot
 
-1. Go to https://discord.com/developers/applications create an application
+1. Go to <https://discord.com/developers/applications> create an application
 2. Build a Discord bot under the application
 3. Get the token from bot setting
 
@@ -65,7 +65,7 @@
 
 ### Step 2: Generate a OpenAI API key
 
-1. Go to https://beta.openai.com/account/api-keys
+1. Go to <https://beta.openai.com/account/api-keys>
 
 2. Click Create new secret key
 
@@ -115,4 +115,5 @@ OR
    2. paste it into `.env` under `DISCORD_CHANNEL_ID`
 
 ## FMP_API
-https://site.financialmodelingprep.com/
+
+<https://site.financialmodelingprep.com/>
