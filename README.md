@@ -63,7 +63,7 @@
 
    Enable `bot` and `applications.commands` scopes, copy the generated URL and paste it into your browser
 
-### Step 2: Geanerate a OpenAI API key
+### Step 2: Generate a OpenAI API key
 
 1. Go to https://beta.openai.com/account/api-keys
 
@@ -113,3 +113,6 @@ OR
         ![channel-id](https://user-images.githubusercontent.com/89479282/207697217-e03357b3-3b3d-44d0-b880-163217ed4a49.PNG)
 
    2. paste it into `.env` under `DISCORD_CHANNEL_ID`
+
+## FMP_API
+https://site.financialmodelingprep.com/

@@ -1,6 +1,6 @@
 """Discord Bot for ChatGPT."""
 import discord
-from discord import app_commands
+from discord import option
 from src import responses
 from src import log
 import os
@@ -9,14 +9,13 @@ logger = log.setup_logger(__name__)
 
 isPrivate = False
 
-
-class aclient(discord.Client):
-    def __init__(self) -> None:
-        super().__init__(intents=discord.Intents.default())
-        self.tree = app_commands.CommandTree(self)
-        self.activity = discord.Activity(
-            type=discord.ActivityType.watching, name="/chat | /help"
-        )
+# class aclient(discord.Client):
+#     def __init__(self) -> None:
+#         super().__init__(intents=discord.Intents.default())
+#         self.tree = app_commands.CommandTree(self)
+#         self.activity = discord.Activity(
+#             type=discord.ActivityType.watching, name="/chat | /help"
+#         )
 
 
 async def send_message(message, user_message):
@@ -100,7 +99,10 @@ async def send_start_prompt(client):
 
 
 def run_discord_bot():
-    client = aclient()
+    # Note: This is not generally recommended by Discord. It is this way only for the two servers running this release.
+    intents = discord.Intents.all()
+
+    client = discord.Bot(intents=intents)
 
     @client.event
     async def on_ready():
@@ -108,7 +110,7 @@ def run_discord_bot():
         await client.tree.sync()
         logger.info(f"{client.user} is now running!")
 
-    @client.tree.command(name="chat", description="Have a chat with ChatGPT")
+    @client.slash_command(name="chat", description="Have a chat with ChatGPT")
     async def chat(interaction: discord.Interaction, *, message: str):
         if interaction.user == client.user:
             return
@@ -118,7 +120,7 @@ def run_discord_bot():
         logger.info(f"\x1b[31m{username}\x1b[0m : '{user_message}' ({channel})")
         await send_message(interaction, user_message)
 
-    @client.tree.command(name="private", description="Toggle private access")
+    @client.slash_command(name="private", description="Toggle private access")
     async def private(interaction: discord.Interaction):
         global isPrivate
         await interaction.response.defer(ephemeral=False)
@@ -134,7 +136,7 @@ def run_discord_bot():
                 "> **Warn: You already on private mode. If you want to switch to public mode, use `/public`**"
             )
 
-    @client.tree.command(name="public", description="Toggle public access")
+    @client.slash_command(name="public", description="Toggle public access")
     async def public(interaction: discord.Interaction):
         global isPrivate
         await interaction.response.defer(ephemeral=False)
@@ -150,7 +152,7 @@ def run_discord_bot():
             )
             logger.info("You already on public mode!")
 
-    @client.tree.command(
+    @client.slash_command(
         name="reset", description="Complete reset ChatGPT conversation history"
     )
     async def reset(interaction: discord.Interaction):
@@ -160,7 +162,7 @@ def run_discord_bot():
         logger.info("\x1b[31mChatGPT bot has been successfully reset\x1b[0m")
         await send_start_prompt(client)
 
-    @client.tree.command(name="help", description="Show help for the bot")
+    @client.slash_command(name="help", description="Show help for the bot")
     async def help(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         await interaction.followup.send(
