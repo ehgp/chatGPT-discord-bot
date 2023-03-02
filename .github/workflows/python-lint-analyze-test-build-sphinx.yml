@@ -32,12 +32,12 @@ jobs:
             matrix:
                 python-version: [3.8]
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-
             - uses: de-vri-es/setup-git-credentials@v2
               with:
-                  credentials: ${{secrets.GITHUB_TOKEN}}
+                  credentials: ${{secrets.GIT_CREDENTIALS}}}
+
+            - name: Checkout repository
+              uses: actions/checkout@v3
 
             - name: lint
               uses: pre-commit/action@v3.0.0
