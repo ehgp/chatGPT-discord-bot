@@ -39,7 +39,6 @@ jobs:
               uses: pre-commit/action@v3.0.0
               with:
                   extra_args: flake8 black pylint pydocstyle isort --all-files
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # analyze:
     #     name: Analyze
