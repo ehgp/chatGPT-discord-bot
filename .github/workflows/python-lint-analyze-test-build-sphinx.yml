@@ -50,7 +50,7 @@ jobs:
               run: |
                   pip install --upgrade pip --quiet
                   pip install pre-commit==2.20.0 --quiet
-                  pre-commit install --file linters/.pre-commit-config.yaml
+                  pre-commit install
 
             - name: lint
               run: pre-commit run --all-files

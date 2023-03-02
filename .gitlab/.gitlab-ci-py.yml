@@ -45,7 +45,7 @@ lint:
         - pip install --upgrade pip --quiet
         - pip install -r requirements.txt
         - pip install pre-commit==2.20.0 --quiet
-        - pre-commit install --file linters/.pre-commit-config.yaml
+        - pre-commit install
         - pre-commit run --all-files
 
 sast:
