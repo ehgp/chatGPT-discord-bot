@@ -50,7 +50,7 @@ jobs:
               run: |
                   pip install --upgrade pip --quiet
                   pip install pre-commit==2.20.0 --quiet
-                  pre-commit install --file linters/.pre-commit-config.yaml
+                  pre-commit install --file ../../linters/.pre-commit-config.yaml
 
             - name: lint
               run: pre-commit run --all-files
@@ -135,42 +135,42 @@ jobs:
     #               pip install . --quiet
     #               python -m pytest
 
-    build:
-        runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
-            matrix:
-                python-version: [3.8]
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
+    # build:
+    #     runs-on: ubuntu-latest
+    #     strategy:
+    #         fail-fast: false
+    #         matrix:
+    #             python-version: [3.8]
+    #     steps:
+    #         - name: Checkout repository
+    #           uses: actions/checkout@v3
 
-            - name: Set up Python 3.8
-              uses: actions/setup-python@v2
-              with:
-                  python-version: ${{ matrix.python-version }}
-                  # Optional - x64 or x86 architecture, defaults to x64
-                  architecture: "x64"
+    #         - name: Set up Python 3.8
+    #           uses: actions/setup-python@v2
+    #           with:
+    #               python-version: ${{ matrix.python-version }}
+    #               # Optional - x64 or x86 architecture, defaults to x64
+    #               architecture: "x64"
 
-              # You can test your matrix by printing the current Python version
-            - name: Display Python version
-              run: python -c "import sys; print(sys.version)"
+    #           # You can test your matrix by printing the current Python version
+    #         - name: Display Python version
+    #           run: python -c "import sys; print(sys.version)"
 
-            - name: Sphinx Pages
-              run: |
-                  pip install --upgrade pip --quiet
-                  pip install -r requirements.txt --quiet
-                  sphinx-build -b html docs/source public
+    #         - name: Sphinx Pages
+    #           run: |
+    #               pip install --upgrade pip --quiet
+    #               pip install -r requirements.txt --quiet
+    #               sphinx-build -b html docs/source public
 
-            - name: Upload artifacts
-              uses: actions/upload-artifact@v1
-              with:
-                  name: html-docs
-                  path: public
+    #         - name: Upload artifacts
+    #           uses: actions/upload-artifact@v1
+    #           with:
+    #               name: html-docs
+    #               path: public
 
-            - name: Deploy
-              uses: peaceiris/actions-gh-pages@v3
-              if: github.ref == 'refs/heads/main'
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: public
+    #         - name: Deploy
+    #           uses: peaceiris/actions-gh-pages@v3
+    #           if: github.ref == 'refs/heads/main'
+    #           with:
+    #               github_token: ${{ secrets.GITHUB_TOKEN }}
+    #               publish_dir: public
