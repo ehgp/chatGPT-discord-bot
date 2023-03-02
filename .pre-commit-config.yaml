@@ -52,3 +52,10 @@ repos:
           - id: isort
             name: isort (pyi)
             types: [pyi]
+
+    # - repo: https://github.com/antonbabenko/pre-commit-terraform
+    #   rev: v1.74.1
+    #   hooks:
+    #       - id: terraform_fmt
+    #         args:
+    #             - --args=-write=true
