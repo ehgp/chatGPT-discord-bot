@@ -35,6 +35,9 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v3
 
+            - name: Set Up Github Token
+              run: echo "machine github.com login github-ci-token password ${GITHUB_TOKEN}" > ~/.netrc
+
             - name: lint
               uses: pre-commit/action@v3.0.0
               with:
