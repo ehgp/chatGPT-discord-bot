@@ -48,6 +48,7 @@ jobs:
 
             - name: Install dependencies
               run: |
+                  echo "machine github.com login github-ci-token password ${CI_JOB_TOKEN}" > ~/.netrc
                   pip install --upgrade pip --quiet
                   pip install pre-commit==2.20.0 --quiet
                   pre-commit install
