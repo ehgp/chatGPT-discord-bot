@@ -162,7 +162,4 @@ cython_debug/
 .env
 mymodels.json
 chat_logs
-**/*.txt
-**/*.json
-**/*.jsonl
-./chat_logs
+client_secret

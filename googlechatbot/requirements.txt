@@ -1,0 +1,9 @@
+arrow==1.2.3
+google-api-python-client==2.81.0
+oauth2client==4.1.3
+pytest==7.2.2
+boto3==1.26.*
+flask==2.2.*
+apscheduler==3.10.*
+cryptography==40.0.*
+beautifulsoup4==4.12.*
